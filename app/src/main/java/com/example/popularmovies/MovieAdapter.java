@@ -1,6 +1,7 @@
 package com.example.popularmovies;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import com.example.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
@@ -40,12 +43,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
 
-        String posterURL = "https://image.tmdb.org/t/p/w185/" + movies.get(position).getPosterPath();
+        String posterURL = "https://image.tmdb.org/t/p/w500/" + movies.get(position).getPosterPath();
+
 
         Picasso.get()
                 .load(posterURL)
                 .placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher)
+                .resize(530, 0)
                 .into(holder.imageView);
 
     }

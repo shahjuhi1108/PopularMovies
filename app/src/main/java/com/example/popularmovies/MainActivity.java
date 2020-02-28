@@ -2,6 +2,8 @@ package com.example.popularmovies;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MovieAdapter adapter;
     private static final int NUMBER_OF_COLUMNS = 2;
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,39 @@ public class MainActivity extends AppCompatActivity {
 
         URL getTheURL = NetworkUtils.buildUrl();
         new PopMovieQueryTask().execute(getTheURL);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int itemId = item.getItemId();
+
+        if (mToast != null) {
+            mToast.cancel();
+        }
+
+        switch (itemId) {
+
+            case R.id.action_popular:
+                mToast = Toast.makeText(this, "Item popular clicked.", Toast.LENGTH_LONG);
+                mToast.show();
+                return true;
+
+            case R.id.action_topRated:
+                mToast = Toast.makeText(this, "Item top rated clicked.", Toast.LENGTH_LONG);
+                mToast.show();
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
 
     }
 
@@ -69,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private void closeOnError() {
         finish();
