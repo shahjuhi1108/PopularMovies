@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="error_message">Error</string>
+    <string name="detail_error_message">The movie is not available.</string>
+</resources>
