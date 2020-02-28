@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class NetworkUtils {
 
     final static String GITHUB_BASE_URL =
-            "";
+            "https://api.themoviedb.org/3/movie/popular?api_key=<key>&language=en-US&page=1";
 
     //final static String PARAM_QUERY = "q";
 

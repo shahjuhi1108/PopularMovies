@@ -1,59 +1,38 @@
 package com.example.popularmovies;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.popularmovies.model.Movie;
 import com.example.popularmovies.utilities.JsonUtils;
 import com.example.popularmovies.utilities.NetworkUtils;
-import com.squareup.picasso.Picasso;
-
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
-
-import static com.example.popularmovies.utilities.JsonUtils.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageView mMoviePoster;
-    private TextView mPopMovieResult;
-    private TextView mErrorMessage;
-    private ProgressBar mProgressBar;
-
+    private MovieAdapter adapter;
+    private static final int NUMBER_OF_COLUMNS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mMoviePoster = (ImageView) findViewById(R.id.image_iv);
-
-        mPopMovieResult = (TextView) findViewById(R.id.tv_pop_movies_result);
-
-        mErrorMessage = (TextView) findViewById(R.id.tv_error_message_display);
-
-        mProgressBar = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+        RecyclerView recyclerView = findViewById(R.id.rv_movies);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, NUMBER_OF_COLUMNS));
+        adapter = new MovieAdapter(this, Collections.<Movie>emptyList());
+        recyclerView.setAdapter(adapter);
 
         URL getTheURL = NetworkUtils.buildUrl();
         new PopMovieQueryTask().execute(getTheURL);
 
-    }
-
-    private void showJsonDataView() {
-        mErrorMessage.setVisibility(View.INVISIBLE);
-        mPopMovieResult.setVisibility(View.VISIBLE);
-    }
-
-    private void showErrorMessage() {
-        mPopMovieResult.setVisibility(View.INVISIBLE);
-        mErrorMessage.setVisibility(View.VISIBLE);
     }
 
     public class PopMovieQueryTask extends AsyncTask<URL, Void, String> {
@@ -61,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -81,38 +59,20 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String movieURL) {
-            mProgressBar.setVisibility(View.INVISIBLE);
             if (movieURL != null && !movieURL.equals("")) {
                 List<Movie> movies = JsonUtils.parseMovieJson(movieURL);
                 if (movies == null) {
                     closeOnError();
                     return;
                 }
-                populateUI(movies);
-
-
+                adapter.setMovies(movies);
             }
         }
     }
+
     private void closeOnError() {
         finish();
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_LONG).show();
-
-    }
-
-    private void populateUI(List<Movie> movies) {
-//        TextView title = findViewById(R.id.tv_pop_movies_result);
-//        title.setText(movies.get(0).getMovieTitle());
-
-        String posterURL = "https://image.tmdb.org/t/p/w185/" + movies.get(0).getPosterPath();
-
-        Picasso picasso = Picasso.get();
-        picasso.setIndicatorsEnabled(true);
-        picasso.load(posterURL)
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
-                .into(mMoviePoster);
-
     }
 
 }
