@@ -1,29 +1,30 @@
 package com.example.popularmovies;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     private List<Movie> movies;
     private LayoutInflater inflater;
+    final private ListItemClickListener mOnClickListener;
 
-    public MovieAdapter(Context context, List<Movie> movies) {
+    public interface ListItemClickListener {
+        void onListItemClick(Movie clickedItemIndex);
+    }
+
+    public MovieAdapter(Context context, List<Movie> movies, ListItemClickListener listener) {
         this.inflater = LayoutInflater.from(context);
         this.movies = movies;
+        this.mOnClickListener = listener;
     }
 
     public void setMovies(List<Movie> movies) {
@@ -68,8 +69,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         public MovieViewHolder(View view) {
             super(view);
             imageView = view.findViewById(R.id.iv_posters);
+            imageView.setClickable(true);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int clickedPosition = getAdapterPosition();
+                    mOnClickListener.onListItemClick(movies.get(clickedPosition));
+                }
+            });
         }
-
 
     }
 

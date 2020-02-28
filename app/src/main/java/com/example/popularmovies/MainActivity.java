@@ -8,7 +8,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.popularmovies.model.Movie;
 import com.example.popularmovies.utilities.JsonUtils;
 import com.example.popularmovies.utilities.NetworkUtils;
@@ -17,11 +16,21 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener{
 
     private MovieAdapter adapter;
     private static final int NUMBER_OF_COLUMNS = 2;
     private Toast mToast;
+
+    @Override
+    public void onListItemClick(Movie clickedItemIndex) {
+        if (mToast != null) {
+            mToast.cancel();
+        }
+
+        mToast = Toast.makeText(this, clickedItemIndex.getMovieTitle(), Toast.LENGTH_LONG);
+        mToast.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +39,10 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.rv_movies);
         recyclerView.setLayoutManager(new GridLayoutManager(this, NUMBER_OF_COLUMNS));
-        adapter = new MovieAdapter(this, Collections.<Movie>emptyList());
+        adapter = new MovieAdapter(this, Collections.<Movie>emptyList(), this);
         recyclerView.setAdapter(adapter);
 
-        URL getTheURL = NetworkUtils.buildUrl();
+        URL getTheURL = NetworkUtils.buildPopularURL();
         new PopMovieQueryTask().execute(getTheURL);
 
     }
@@ -56,14 +65,13 @@ public class MainActivity extends AppCompatActivity {
         switch (itemId) {
 
             case R.id.action_popular:
-                mToast = Toast.makeText(this, "Item popular clicked.", Toast.LENGTH_LONG);
-                mToast.show();
+                URL getTheURL = NetworkUtils.buildPopularURL();
+                new PopMovieQueryTask().execute(getTheURL);
                 return true;
 
             case R.id.action_topRated:
-                mToast = Toast.makeText(this, "Item top rated clicked.", Toast.LENGTH_LONG);
-                mToast.show();
-                return true;
+                URL getTopRatedURL = NetworkUtils.buildTopRatedURL();
+                new PopMovieQueryTask().execute(getTopRatedURL);
 
         }
 

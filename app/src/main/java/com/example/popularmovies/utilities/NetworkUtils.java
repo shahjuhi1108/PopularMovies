@@ -11,8 +11,9 @@ import java.util.Scanner;
 
 public class NetworkUtils {
 
-    final static String GITHUB_BASE_URL =
-            "https://api.themoviedb.org/3/movie/popular?api_key=<key>&language=en-US&page=1";
+    final static String GITHUB_POPULAR_URL =
+            "https://api.themoviedb.org/3/movie/popular?api_key=&language=en-US&page=1";
+
 
     //final static String PARAM_QUERY = "q";
 
@@ -29,15 +30,23 @@ public class NetworkUtils {
      * @param githubSearchQuery The keyword that will be queried for.
      * @return The URL to use to query the GitHub server.
      */
-    public static URL buildUrl() {
-//        Uri builtUri = Uri.parse(GITHUB_BASE_URL).buildUpon()
-//                .appendQueryParameter(PARAM_QUERY, githubSearchQuery)
-//                .appendQueryParameter(PARAM_SORT, sortBy)
-//                .build();
+    public static URL buildPopularURL() {
 
         URL url = null;
         try {
-            url = new URL(GITHUB_BASE_URL);
+            url = new URL(GITHUB_POPULAR_URL);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public static URL buildTopRatedURL() {
+
+        URL url = null;
+        try {
+            url = new URL("https://api.themoviedb.org/3/movie/top_rated?api_key=&language=en-US&page=1");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
