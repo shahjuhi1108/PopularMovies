@@ -1,9 +1,13 @@
 package com.example.popularmovies;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,15 +25,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private MovieAdapter adapter;
     private static final int NUMBER_OF_COLUMNS = 2;
     private Toast mToast;
+    private ImageView mMoviePoster;
 
     @Override
     public void onListItemClick(Movie clickedItemIndex) {
-        if (mToast != null) {
-            mToast.cancel();
-        }
 
-        mToast = Toast.makeText(this, clickedItemIndex.getMovieTitle(), Toast.LENGTH_LONG);
-        mToast.show();
+        Context context = this;
+        Class detailsOfMovie = MovieDetailsActivity.class;
+
+        Intent startMovieDetailsIntent = new Intent(context, detailsOfMovie);
+
+        startMovieDetailsIntent.putExtra(Intent.EXTRA_TEXT, clickedItemIndex);
+
+        startActivity(startMovieDetailsIntent);
+
     }
 
     @Override
@@ -37,13 +46,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mMoviePoster = findViewById(R.id.iv_posters);
+
         RecyclerView recyclerView = findViewById(R.id.rv_movies);
         recyclerView.setLayoutManager(new GridLayoutManager(this, NUMBER_OF_COLUMNS));
         adapter = new MovieAdapter(this, Collections.<Movie>emptyList(), this);
         recyclerView.setAdapter(adapter);
 
-        URL getTheURL = NetworkUtils.buildPopularURL();
+        URL getTheURL = NetworkUtils.buildURL();
         new PopMovieQueryTask().execute(getTheURL);
+
 
     }
 

@@ -1,7 +1,5 @@
 package com.example.popularmovies.utilities;
 
-import android.net.Uri;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -11,8 +9,16 @@ import java.util.Scanner;
 
 public class NetworkUtils {
 
-    final static String GITHUB_POPULAR_URL =
-            "https://api.themoviedb.org/3/movie/popular?api_key=&language=en-US&page=1";
+    private final static String API_KEY = "";
+
+    private final static String BASE_URL=
+            "https://api.themoviedb.org/3/movie/upcoming?api_key=" + API_KEY + "&language=en-US&page=1";
+
+    private final static String POPULAR_MOVIES_URL =
+            "https://api.themoviedb.org/3/movie/popular?api_key=" + API_KEY + "&language=en-US&page=1";
+
+    private final static String TOP_RATED_MOVIES_URL =
+            "https://api.themoviedb.org/3/movie/top_rated?api_key=" + API_KEY + "&language=en-US&page=1";
 
 
     //final static String PARAM_QUERY = "q";
@@ -30,11 +36,22 @@ public class NetworkUtils {
      * @param githubSearchQuery The keyword that will be queried for.
      * @return The URL to use to query the GitHub server.
      */
+
+    public static URL buildURL() {
+        URL url = null;
+        try {
+            url = new URL(BASE_URL);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
     public static URL buildPopularURL() {
 
         URL url = null;
         try {
-            url = new URL(GITHUB_POPULAR_URL);
+            url = new URL(POPULAR_MOVIES_URL);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -46,7 +63,7 @@ public class NetworkUtils {
 
         URL url = null;
         try {
-            url = new URL("https://api.themoviedb.org/3/movie/top_rated?api_key=&language=en-US&page=1");
+            url = new URL(TOP_RATED_MOVIES_URL);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

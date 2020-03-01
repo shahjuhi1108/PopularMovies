@@ -14,6 +14,10 @@ public class JsonUtils {
     public static final String KEY_RESULTS = "results";
     public static final String KEY_TITLE = "title";
     public static final String KEY_POSTER_PATH = "poster_path";
+    public static final String KEY_ORIGINAL_TITLE = "original_title";
+    public static final String KEY_MOVIE_OVERVIEW = "overview";
+    public static final String KEY_RELEASE_DATE = "release_date";
+    public static final String KEY_VOTE_AVERAGE = "vote_average";
 
     public static List<Movie> parseMovieJson(String json) {
 
@@ -47,8 +51,12 @@ public class JsonUtils {
         try {
 
             movie.setMovieTitle(jsonObject.getString(KEY_TITLE));
-
             movie.setPosterPath(jsonObject.getString(KEY_POSTER_PATH));
+            movie.setOriginalTitle(jsonObject.getString(KEY_ORIGINAL_TITLE));
+            movie.setMovieOverview(jsonObject.getString(KEY_MOVIE_OVERVIEW));
+            movie.setReleaseDate(jsonObject.getString(KEY_RELEASE_DATE));
+            movie.setVoteAverage(jsonObject.getDouble(KEY_VOTE_AVERAGE));
+
         }
         catch (JSONException e) {
             e.printStackTrace();
