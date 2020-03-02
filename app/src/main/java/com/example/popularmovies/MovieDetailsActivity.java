@@ -50,7 +50,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         overview.setText(movie.getMovieOverview());
 
         TextView average = findViewById(R.id.tv_vote_average);
-        average.setText(movie.getVoteAverage().toString());
+        average.setText(String.format("%1.1f", movie.getVoteAverage()));
 
 
     }

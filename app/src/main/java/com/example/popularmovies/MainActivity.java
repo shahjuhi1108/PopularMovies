@@ -8,24 +8,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.popularmovies.model.Movie;
 import com.example.popularmovies.utilities.JsonUtils;
 import com.example.popularmovies.utilities.NetworkUtils;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener{
+import static com.example.popularmovies.MovieAdapter.ListItemClickListener;
+
+public class MainActivity extends AppCompatActivity implements ListItemClickListener{
 
     private MovieAdapter adapter;
     private static final int NUMBER_OF_COLUMNS = 2;
     private Toast mToast;
     private ImageView mMoviePoster;
+    private ProgressBar mLoadingIndicator;
 
     @Override
     public void onListItemClick(Movie clickedItemIndex) {
@@ -47,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         setContentView(R.layout.activity_main);
 
         mMoviePoster = findViewById(R.id.iv_posters);
+
+        mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
 
         RecyclerView recyclerView = findViewById(R.id.rv_movies);
         recyclerView.setLayoutManager(new GridLayoutManager(this, NUMBER_OF_COLUMNS));
@@ -96,6 +105,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            mLoadingIndicator.setVisibility(View.VISIBLE);
+
         }
 
         @Override
@@ -115,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         @Override
         protected void onPostExecute(String movieURL) {
+            mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (movieURL != null && !movieURL.equals("")) {
                 List<Movie> movies = JsonUtils.parseMovieJson(movieURL);
                 if (movies == null) {

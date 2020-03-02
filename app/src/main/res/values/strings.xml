@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">Popular Movies</string>
-    <string name="error_message">Error</string>
     <string name="detail_error_message">The movie is not available.</string>
+    <string name="original_title">Original Title: </string>
+    <string name="release_date">Release Date: </string>
+    <string name="overview">A plot synopsis: </string>
+    <string name="user_rating">User rating: </string>
+    <string name="content_description">Movie Poster</string>
+    <string name="movie_grid_description">Movie Description</string>
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top Rated</string>
 </resources>
